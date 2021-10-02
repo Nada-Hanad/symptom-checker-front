@@ -1,14 +1,15 @@
-import React from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Therap from "./therap";
-import BasicKnowledge from "./basicKnowledge";
-import SymptomTab from "./symptomsTab";
-import IfSick from "./ifSick";
-import Protect from "./protectYouself";
+import React from 'react';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Therap from './therap';
+import BasicKnowledge from './basicKnowledge';
+import SymptomTab from './symptomsTab';
+import IfSick from './ifSick';
+import Protect from './protectYouself';
+import Stats from './stats';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -21,7 +22,7 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
@@ -39,22 +40,22 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: any) {
   return {
     id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
+    'aria-controls': `vertical-tabpanel-${index}`
   };
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: "rgba(224, 224, 224, 0.3);",
-    display: "flex",
-    color: "black",
-    height: "90vh",
-    overflowX: "hidden",
+    backgroundColor: 'rgba(224, 224, 224, 0.3);',
+    display: 'flex',
+    color: 'black',
+    height: '90vh',
+    overflowX: 'hidden'
   },
   tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
-  },
+    borderRight: `1px solid ${theme.palette.divider}`
+  }
 }));
 
 export default function VerticalTabs() {
@@ -68,38 +69,42 @@ export default function VerticalTabs() {
   return (
     <div className={classes.root}>
       <Tabs
-        TabIndicatorProps={{ style: { background: "#58cad9" } }}
-        indicatorColor="primary"
-        orientation="vertical"
+        TabIndicatorProps={{ style: { background: '#58cad9' } }}
+        indicatorColor='primary'
+        orientation='vertical'
         value={value}
         onChange={handleChange}
-        aria-label="Vertical tabs example"
+        aria-label='Vertical tabs example'
         className={classes.tabs}
       >
-        <Tab label="Basic knowledge" {...a11yProps(0)} />
-        <Tab label="Symptoms" {...a11yProps(1)} />
-        <Tab label="How to protect yourself and others" {...a11yProps(2)} />
-        <Tab label="If you were sick" {...a11yProps(3)} />
-        <Tab label="therapeutics" {...a11yProps(4)} />
+        <Tab label='Basic knowledge' {...a11yProps(0)} />
+        <Tab label='Statistics' {...a11yProps(1)} />
+        <Tab label='Symptoms' {...a11yProps(2)} />
+        <Tab label='How to protect yourself and others' {...a11yProps(3)} />
+        <Tab label='If you were sick' {...a11yProps(4)} />
+        <Tab label='therapeutics' {...a11yProps(5)} />
       </Tabs>
-      <div className="second-tabs">
+      <div className='second-tabs'>
         <TabPanel value={value} index={0}>
-          <div className="whats-covid">
+          <div className='whats-covid'>
             <BasicKnowledge></BasicKnowledge>
           </div>
         </TabPanel>
 
-        <TabPanel value={value} index={1}>
+        <TabPanel value={value} index={2}>
           <SymptomTab></SymptomTab>
         </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Stats></Stats>
+        </TabPanel>
 
-        <TabPanel value={value} index={2}>
+        <TabPanel value={value} index={3}>
           <Protect></Protect>
         </TabPanel>
-        <TabPanel value={value} index={3}>
+        <TabPanel value={value} index={4}>
           <IfSick></IfSick>
         </TabPanel>
-        <TabPanel value={value} index={4}>
+        <TabPanel value={value} index={5}>
           <Therap></Therap>
         </TabPanel>
       </div>

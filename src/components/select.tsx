@@ -50,6 +50,7 @@ export default function CustomizedSelects({
     <div>
       <FormControl sx={{ m: 1 }} variant='standard'>
         <InputLabel
+          shrink={true}
           style={{ fontFamily: 'Titillium Web', fontSize: 20 }}
           htmlFor='demo-customized-textbox'
         >
@@ -69,7 +70,7 @@ export default function CustomizedSelects({
           htmlFor='demo-customized-select-native'
           style={{ fontFamily: 'Titillium Web', fontSize: 20 }}
         >
-          Sexe
+          Gender
         </InputLabel>
         <NativeSelect
           id='demo-customized-select-native'
@@ -86,11 +87,13 @@ export default function CustomizedSelects({
       <TextareaAutosize
         aria-label='minimum height'
         placeholder='Type in here...'
+        value={evidence}
         style={{
           width: 700,
           marginLeft: 9,
           marginTop: 10,
-          minHeight: 45,
+          marginBottom: 120,
+          minHeight: 85,
           maxHeight: 100,
           padding: 10,
           overflowY: 'scroll',

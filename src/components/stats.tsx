@@ -1,10 +1,10 @@
-import Map from "./map";
-import CountrySelect from "./countrySelector";
-import GlobalChart from "./globalChart";
-import VaccChart from "./vaccChart";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { CircularProgress } from "@material-ui/core";
+import Map from './map';
+import CountrySelect from './countrySelector';
+import GlobalChart from './globalChart';
+import VaccChart from './vaccChart';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { CircularProgress } from '@material-ui/core';
 
 export default function Stats() {
   const [globalData, setGlobalData] = useState(null);
@@ -14,15 +14,15 @@ export default function Stats() {
   const [mapLoading, setMapLoading] = useState(true);
   const [mapError, setMapError] = useState(false);
   const [isError, setIsError] = useState(false);
-  const url = "http://localhost:3002";
+  const url = 'http://localhost:3002';
   const [country, setCountry] = useState<any>({
-    code: "",
-    label: "Choose country",
-    phone: "",
+    code: '',
+    label: 'Choose country',
+    phone: ''
   });
   useEffect(() => {
     axios
-      .get(url + "/map")
+      .get(url + '/map')
       .then((response) => {
         setMapData(response.data);
       })
@@ -32,7 +32,7 @@ export default function Stats() {
       .finally(() => {
         setMapLoading(false);
       });
-    Promise.all([axios.get(url + "/global"), axios.get(url + "/vaccination")])
+    Promise.all([axios.get(url + '/global'), axios.get(url + '/vaccination')])
       .then((response) => {
         setGlobalData(response[0].data);
         setVaccData(response[1].data);
@@ -50,11 +50,11 @@ export default function Stats() {
     setIsError(false);
     Promise.all([
       axios.get(url + `/data-by-country`, {
-        params: { iso: choosenCountry },
+        params: { iso: choosenCountry }
       }),
       axios.get(url + `/vacc-by-country`, {
-        params: { iso: choosenCountry },
-      }),
+        params: { iso: choosenCountry }
+      })
     ])
       .then((response) => {
         setGlobalData(response[0].data);
@@ -69,17 +69,17 @@ export default function Stats() {
       });
   };
   return (
-    <div className="stats">
-      <div className="search">
+    <div className='stats'>
+      <div className='search'>
         <CountrySelect
           updateChartByCountry={updateChartByCountry}
           country={country}
           setCountry={setCountry}
         ></CountrySelect>
       </div>
-      <div className="stats-elements">
+      <div className='stats-elements'>
         {mapLoading ? (
-          <div className="map">
+          <div className='map'>
             <CircularProgress></CircularProgress>
           </div>
         ) : mapError ? (
@@ -88,16 +88,16 @@ export default function Stats() {
           <Map mapData={mapData}></Map>
         )}
         {loading ? (
-          <div className="charts-part">
+          <div className='charts-part'>
             <CircularProgress></CircularProgress>
           </div>
         ) : isError ? (
-          <div className="charts-part">
+          <div className='charts-part'>
             <h1>Data is currently unavailable.</h1>
           </div>
         ) : (
           <>
-            <div className="charts-part">
+            <div className='charts-part'>
               <GlobalChart chartData={globalData}></GlobalChart>
               <VaccChart chartData={vaccData}></VaccChart>
             </div>
