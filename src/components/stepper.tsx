@@ -68,7 +68,8 @@ export default function HorizontalNonLinearStepper() {
           Swal.fire({
             title: "You're all set!",
             icon: 'success',
-            confirmButtonText: 'Okay'
+            confirmButtonText: 'Okay',
+            confirmButtonColor: '#58cad9'
           }).then((result) => {
             if (result.isConfirmed) {
               handleNext();
