@@ -21,6 +21,7 @@ const steps = ['Basic info', 'Provide us some evidence', 'Get your results'];
 export default function HorizontalNonLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [age, setAge] = React.useState(null);
+
   const [sexe, setSexe] = React.useState('');
   const [done, setDone] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
@@ -75,7 +76,16 @@ export default function HorizontalNonLinearStepper() {
           });
         } else {
           if (resp.question == null) {
-            setError(true);
+            Swal.fire({
+              title: 'Please provide us more intel to proceed.',
+              icon: 'warning',
+              confirmButtonText: 'Okay',
+              confirmButtonColor: '#58cad9'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                handleBack();
+              }
+            });
           } else {
             setQuestion(resp.question);
           }
@@ -140,6 +150,17 @@ export default function HorizontalNonLinearStepper() {
   const useStyles = makeStyles((theme: Theme) => ({
     root: {
       fontFamily: 'Titillium Web'
+    },
+    step: {
+      '& $completed': {
+        color: 'lightgreen'
+      },
+      '& $active': {
+        color: 'pink'
+      },
+      '& $disabled': {
+        color: 'red'
+      }
     }
   }));
 

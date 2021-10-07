@@ -85,6 +85,7 @@ export default function CustomizedSelects({
       </FormControl>
       <br />
       <TextareaAutosize
+        className='textarea'
         aria-label='minimum height'
         placeholder='Type in here...'
         value={evidence}
