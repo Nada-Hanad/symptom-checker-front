@@ -5,13 +5,11 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import HomeIcon from './icons/o2';
-
+import HorizontalNonLinearStepper from './stepper';
 import Question from './icons/question';
-
 import About from './about';
 import Logo from './icons/logo';
 import Symptoms from './icons/symptoms';
-import Chip from './qcmCard';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -50,9 +48,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    fontFamily: 'Titillium Web',
     overflowX: 'hidden',
-    backgroundColor: 'rgba(224, 224, 224, 0.3)'
+    padding: 0
   }
 }));
 
@@ -75,7 +72,11 @@ export default function ScrollableTabsButtonForce() {
         <Tabs
           className='tabs'
           value={value}
-          style={{ height: 60, color: 'white', marginBottom: 10 }}
+          style={{
+            height: 60,
+            color: 'white',
+            marginBottom: 10
+          }}
           onChange={handleChange}
           variant='scrollable'
           scrollButtons='on'
@@ -85,8 +86,11 @@ export default function ScrollableTabsButtonForce() {
             className='tab'
             label='Home page'
             style={{
+              padding: 0,
               lineHeight: 0,
-              fontWeight: value === 0 ? 'bold' : 'normal'
+              fontFamily: 'Poppins',
+              fontSize: 16,
+              fontWeight: value === 0 ? 'bolder' : 400
             }}
             icon={<HomeIcon />}
             {...a11yProps(2)}
@@ -97,7 +101,9 @@ export default function ScrollableTabsButtonForce() {
             label='Symptoms checker'
             style={{
               lineHeight: 0,
-              fontWeight: value === 1 ? 'bold' : 'normal'
+              fontFamily: 'Poppins',
+              fontSize: 16,
+              fontWeight: value === 1 ? 'bolder' : 400
             }}
             icon={<Symptoms />}
             {...a11yProps(3)}
@@ -106,7 +112,9 @@ export default function ScrollableTabsButtonForce() {
             className='tab'
             style={{
               lineHeight: 0,
-              fontWeight: value === 2 ? 'bold' : 'normal'
+              fontFamily: 'Poppins',
+              fontSize: 16,
+              fontWeight: value === 2 ? 'bolder' : 400
             }}
             label='About Covid'
             icon={<Question />}
@@ -115,12 +123,18 @@ export default function ScrollableTabsButtonForce() {
         </Tabs>
       </div>
       <div className='tab-panels'>
-        <TabPanel value={value} index={0}></TabPanel>
+        <TabPanel value={value} index={0}>
+          <div className='home-page'></div>
+        </TabPanel>
         <TabPanel value={value} index={1}>
-          <Chip></Chip>
+          <div className='stepper-page'>
+            <HorizontalNonLinearStepper></HorizontalNonLinearStepper>
+          </div>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <About></About>
+          <div className='covid-page'>
+            <About></About>
+          </div>
         </TabPanel>
       </div>
     </div>

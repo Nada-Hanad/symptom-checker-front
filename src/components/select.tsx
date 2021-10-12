@@ -19,7 +19,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     padding: '10px 26px 10px 12px',
     transition: theme.transitions.create(['border-color', 'box-shadow']),
     // Use the system font instead of the default Roboto font.
-    fontFamily: ['Titillium Web'].join(','),
+    fontFamily: ['Montserrat'].join(','),
     '&:focus': {
       borderRadius: 4,
       borderColor: '#80bdff',
@@ -47,11 +47,11 @@ export default function CustomizedSelects({
   };
 
   return (
-    <div>
+    <div style={{ width: 450 }}>
       <FormControl sx={{ m: 1 }} variant='standard'>
         <InputLabel
           shrink={true}
-          style={{ fontFamily: 'Titillium Web', fontSize: 20 }}
+          style={{ fontFamily: 'Poppins', fontSize: 20 }}
           htmlFor='demo-customized-textbox'
         >
           Age
@@ -68,7 +68,7 @@ export default function CustomizedSelects({
       <FormControl sx={{ m: 1 }} variant='standard'>
         <InputLabel
           htmlFor='demo-customized-select-native'
-          style={{ fontFamily: 'Titillium Web', fontSize: 20 }}
+          style={{ fontFamily: 'Poppins', fontSize: 20 }}
         >
           Gender
         </InputLabel>
@@ -90,15 +90,15 @@ export default function CustomizedSelects({
         placeholder='Type in here...'
         value={evidence}
         style={{
-          width: 700,
+          width: 450,
           marginLeft: 9,
-          marginTop: 10,
+          marginTop: 30,
           marginBottom: 120,
           minHeight: 85,
           maxHeight: 100,
           padding: 10,
           overflowY: 'scroll',
-          fontFamily: 'Titillium Web',
+          fontFamily: 'Montserrat',
           fontSize: 16,
           borderColor: '#CED4DA',
           borderRadius: 5

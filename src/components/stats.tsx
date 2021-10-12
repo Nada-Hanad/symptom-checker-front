@@ -70,6 +70,29 @@ export default function Stats() {
   };
   return (
     <div className='stats'>
+      <div
+        style={{
+          height: '15vh',
+          marginLeft: '20px',
+          padding: '20px',
+          display: 'grid',
+          placeItems: 'center'
+        }}
+      >
+        <h1 style={{ fontFamily: 'Poppins' }}>Statistics about covid 19</h1>
+        <p style={{ fontFamily: 'Montserrat', fontSize: 16 }}>
+          Those stats are provided by disease.sh api and are updated every 10
+          minutes.
+        </p>
+        <p
+          style={{
+            fontFamily: 'Montserrat',
+            fontSize: 24
+          }}
+        >
+          Please choose a country to filter the data you need.
+        </p>
+      </div>
       <div className='search'>
         <CountrySelect
           updateChartByCountry={updateChartByCountry}
@@ -80,7 +103,7 @@ export default function Stats() {
       <div className='stats-elements'>
         {mapLoading ? (
           <div className='map'>
-            <CircularProgress></CircularProgress>
+            <CircularProgress style={{ color: '#58cad9' }}></CircularProgress>
           </div>
         ) : mapError ? (
           <h1>The map is currently unavailable.</h1>
@@ -89,7 +112,7 @@ export default function Stats() {
         )}
         {loading ? (
           <div className='charts-part'>
-            <CircularProgress></CircularProgress>
+            <CircularProgress style={{ color: '#58cad9' }}></CircularProgress>
           </div>
         ) : isError ? (
           <div className='charts-part'>

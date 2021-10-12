@@ -14,25 +14,25 @@ export default function SingleQ({
   const [chosen, setchosen] = useState(false);
   const [colors, setColors] = useState(['white', 'white', 'white']);
   const yes = () => {
-    setColors(['#e2e2e2', 'white', 'white']);
+    setColors(['rgba(249, 167, 167, 0.1)', 'white', 'white']);
     setchosen(true);
   };
   const no = () => {
-    setColors(['white', '#e2e2e2', 'white']);
+    setColors(['white', 'rgba(249, 167, 167, 0.1)', 'white']);
     setchosen(true);
   };
   const idk = () => {
-    setColors(['white', 'white', '#e2e2e2']);
+    setColors(['white', 'white', 'rgba(249, 167, 167, 0.1)']);
     setchosen(true);
   };
   const requestUpdate = () => {
     var newEvidence;
-    if (colors[0] === '#e2e2e2') {
+    if (colors[0] === 'rgba(249, 167, 167, 0.1)') {
       newEvidence = {
         id: question.items[0].id,
         choice_id: 'present'
       };
-    } else if (colors[1] === '#e2e2e2') {
+    } else if (colors[1] === 'rgba(249, 167, 167, 0.1)') {
       newEvidence = {
         id: question.items[0].id,
         choice_id: 'absent'
@@ -53,7 +53,7 @@ export default function SingleQ({
   return (
     <div className='single-question'>
       <div className='q'>
-        <p style={{ fontSize: 18, marginBottom: 10 }}>{question?.text}</p>
+        <p style={{ fontSize: 20, textAlign: 'start' }}>{question?.text}</p>
       </div>
 
       <div className='options'>

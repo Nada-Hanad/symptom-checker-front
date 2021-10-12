@@ -11,25 +11,39 @@ import CustomizedSelects from './select';
 import Swal from 'sweetalert2';
 import ResultCard from './resultCard';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+var axios = require('axios');
 const Infermedica = require('infermedica');
 const infermedica = new Infermedica({
   appId: '8d5d6688',
   appKey: '4b1b4b84ecaeb6126c5be3cabb38af29'
 });
+
 const steps = ['Basic info', 'Provide us some evidence', 'Get your results'];
 
 export default function HorizontalNonLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [age, setAge] = React.useState(null);
-
   const [sexe, setSexe] = React.useState('');
+  const [recommendation, setRecommendation] = React.useState({
+    recommended_specialist: {
+      id: '',
+      name: ''
+    },
+    recommended_channel: ''
+  });
   const [done, setDone] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [evidence, setEvidence] = React.useState('');
   const [evidenceArray, setEvidenceArray] = React.useState([]);
   const [question, setQuestion] = React.useState(null);
-  const [allSet, setAllSet] = React.useState(false);
+
+  const [triage, setTriage] = React.useState({
+    triage_level: '',
+    serious: [],
+    teleconsultation_applicable: false
+  });
+
   const [conditions, setConditions] = React.useState([]);
   const [completed, setCompleted] = React.useState<{
     [k: number]: boolean;
@@ -61,10 +75,43 @@ export default function HorizontalNonLinearStepper() {
         extras: { disable_groups: true }
       })
       .then((resp: any) => {
-        console.log(resp);
         if (resp.should_stop === true) {
           setDone(true);
-          setConditions(resp.conditions);
+          setConditions(resp.conditions.slice(0, 5));
+          infermedica
+            .postTriage({
+              sex: sexe,
+              age: age,
+              evidence: evidenceArray
+            })
+            .then((triage: any) => {
+              setTriage(triage);
+            })
+            .catch((err: any) => {
+              setError(true);
+            });
+          var data = JSON.stringify({
+            sex: sexe,
+            age: { value: age },
+            evidence: evidenceArray
+          });
+          var config = {
+            method: 'post',
+            url: 'https://api.infermedica.com/v3/recommend_specialist',
+            headers: {
+              'App-Key': '4b1b4b84ecaeb6126c5be3cabb38af29',
+              'App-Id': '8d5d6688',
+              'Content-Type': 'application/json'
+            },
+            data: data
+          };
+          axios(config)
+            .then((resp: any) => {
+              setRecommendation(resp.data);
+            })
+            .catch((err: any) => {
+              setError(true);
+            });
           Swal.fire({
             title: "You're all set!",
             icon: 'success',
@@ -103,7 +150,6 @@ export default function HorizontalNonLinearStepper() {
       setDone(true);
     } else {
       if (activeStep === 1) {
-        setAllSet(true);
         setActiveStep(2);
       } else {
         const context = {
@@ -147,150 +193,205 @@ export default function HorizontalNonLinearStepper() {
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
+    setAge(null);
+    setSexe('');
+    setEvidence('');
+    setDone(false);
+    setError(false);
   };
   const useStyles = makeStyles((theme: Theme) => ({
     root: {
-      fontFamily: 'Titillium Web'
-    },
-    step: {
-      '& $completed': {
-        color: 'lightgreen'
-      },
-      '& $active': {
-        color: 'pink'
-      },
-      '& $disabled': {
-        color: 'red'
-      }
+      fontFamily: 'Poppins',
+      padding: 20
     }
   }));
 
   const classes = useStyles();
   return (
-    <div>
+    <>
       <Box
         sx={{
-          margin: 10,
+          marginTop: 15,
+          marginBottom: 10,
           width: '70vw',
-          minHeight: '80vh',
           backgroundColor: 'white',
-          padding: 2,
           borderRadius: 4,
           boxShadow: '0px 0px 17px -5px rgba(0,0,0,0.2)'
         }}
       >
-        <Stepper nonLinear activeStep={activeStep} sx={{ color: 'red' }}>
-          {steps.map((label, index) => (
-            <Step key={label} completed={completed[index]}>
-              <StepButton className={classes.root} color='inherit'>
-                <p style={{ fontSize: 20 }}>{label}</p>
-              </StepButton>
-            </Step>
-          ))}
-        </Stepper>
-        <div>
-          {allStepsCompleted() ? (
-            <React.Fragment>
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                <Box sx={{ flex: '1 1 auto' }} />
-                <Button onClick={handleReset}>Reset</Button>
-              </Box>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              {activeStep === 0 ? (
-                <Typography sx={{ mt: 2, mb: 1 }}>
-                  <p
-                    style={{
-                      fontSize: 24,
-                      marginLeft: 10,
-                      marginTop: 5,
-                      width: '60%'
-                    }}
-                  >
-                    Please provide us your age, gender and a describtive
-                    paragraph of symptoms you currently have to start. Do note
-                    that in order to pass to the next step, you need to fill all
-                    the fields.
-                  </p>
-
-                  <CustomizedSelects
-                    age={age}
-                    setAge={setAge}
-                    sexe={sexe}
-                    setSexe={setSexe}
-                    evidence={evidence}
-                    setEvidence={setEvidence}
-                  ></CustomizedSelects>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                    <Box sx={{ flex: '1 1 auto' }} />
-                    <Button
-                      disabled={age === 0 || sexe === '' || evidence === ''}
-                      onClick={handleNext}
-                      sx={{ mr: 1 }}
+        <div className='stepper-container'>
+          <Stepper nonLinear activeStep={activeStep}>
+            {steps.map((label, index) => (
+              <Step key={label} completed={completed[index]}>
+                <StepButton className={classes.root} color='inherit'>
+                  <p style={{ fontSize: 20 }}>{label}</p>
+                </StepButton>
+              </Step>
+            ))}
+          </Stepper>
+          <div>
+            {allStepsCompleted() ? (
+              <React.Fragment>
+                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                  <Box sx={{ flex: '1 1 auto' }} />
+                  <Button onClick={handleReset}>Reset</Button>
+                </Box>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                {activeStep === 0 ? (
+                  <Typography sx={{ mt: 2, mb: 1 }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-around'
+                      }}
                     >
-                      {!allSet ? (
-                        <p style={{ fontSize: 20 }}>Next</p>
-                      ) : (
-                        <p style={{ fontSize: 20 }}>Complete</p>
-                      )}
-                    </Button>
-                  </Box>
-                </Typography>
-              ) : activeStep === 1 ? (
-                <Typography sx={{ mt: 2, mb: 1 }}>
-                  <div
-                    style={{
-                      display: 'grid',
-                      placeItems: 'center',
-                      height: '65vh'
-                    }}
-                  >
-                    {loading ? (
-                      <CircularProgress
-                        style={{ color: '#58cad9' }}
-                      ></CircularProgress>
-                    ) : error ? (
-                      <h1>Sorry, try again after refreshing the page.</h1>
-                    ) : done ? (
-                      <h1> </h1>
-                    ) : (
-                      <SingleQ
-                        question={question}
-                        setQuestion={setQuestion}
-                        setEvidenceArray={setEvidenceArray}
-                        evidenceArray={evidenceArray}
-                        fetch={fetchingQs}
-                      ></SingleQ>
-                    )}
-                  </div>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                    <Button color='inherit' onClick={handleBack} sx={{ mr: 1 }}>
-                      <ArrowBackIosIcon
-                        style={{ color: '#58cad9' }}
-                      ></ArrowBackIosIcon>
-                    </Button>
-                    <Box sx={{ flex: '1 1 auto' }} />
-                  </Box>
-                </Typography>
-              ) : (
-                <div className='results-tab'>
-                  {conditions.map((e: any) => (
-                    <ResultCard condition={e}></ResultCard>
-                  ))}
+                      <div style={{ width: 600 }}>
+                        <p
+                          style={{
+                            fontSize: 20,
+                            marginLeft: 10,
+                            marginTop: 35,
+                            marginBottom: 20
+                          }}
+                        >
+                          Please provide us your age, gender and a describtive
+                          paragraph of symptoms you currently have to start. Do
+                          note that in order to pass to the next step, you need
+                          to fill all the fields.
+                        </p>
 
-                  <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                    <Box sx={{ flex: '1 1 auto' }} />
-                    <Button sx={{ mr: 1 }}>
-                      <p style={{ fontSize: 20 }}>Complete</p>
-                    </Button>
-                  </Box>
-                </div>
-              )}
-            </React.Fragment>
-          )}
+                        <CustomizedSelects
+                          age={age}
+                          setAge={setAge}
+                          sexe={sexe}
+                          setSexe={setSexe}
+                          evidence={evidence}
+                          setEvidence={setEvidence}
+                        ></CustomizedSelects>
+                      </div>
+                      <div>
+                        <div className='first-container'></div>
+                      </div>
+                    </div>
+
+                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                      <Box sx={{ flex: '1 1 auto' }} />
+                      <Button
+                        disabled={age === 0 || sexe === '' || evidence === ''}
+                        onClick={handleNext}
+                        sx={{ mr: 1 }}
+                      >
+                        <p style={{ fontSize: 20 }}>Next</p>
+                      </Button>
+                    </Box>
+                  </Typography>
+                ) : activeStep === 1 ? (
+                  <Typography sx={{ mt: 2, mb: 1 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                      <Button
+                        color='inherit'
+                        onClick={handleBack}
+                        sx={{ mr: 1 }}
+                      >
+                        <ArrowBackIosIcon
+                          style={{ color: '#58cad9' }}
+                        ></ArrowBackIosIcon>
+                      </Button>
+                      <Box sx={{ flex: '1 1 auto' }} />
+                    </Box>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                        height: '65vh'
+                      }}
+                    >
+                      {loading ? (
+                        <div
+                          className='single-question'
+                          style={{ display: 'grid', placeItems: 'center' }}
+                        >
+                          <CircularProgress
+                            style={{ color: '#58cad9' }}
+                          ></CircularProgress>
+                        </div>
+                      ) : error ? (
+                        <h1>Sorry, try again after refreshing the page.</h1>
+                      ) : done ? (
+                        <h1> </h1>
+                      ) : (
+                        <SingleQ
+                          question={question}
+                          setQuestion={setQuestion}
+                          setEvidenceArray={setEvidenceArray}
+                          evidenceArray={evidenceArray}
+                          fetch={fetchingQs}
+                        ></SingleQ>
+                      )}
+                      <div className='second-container'></div>
+                    </div>
+                  </Typography>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div className='results-tab'>
+                      <div>
+                        {conditions.map((e: any) => (
+                          <ResultCard condition={e}></ResultCard>
+                        ))}
+                      </div>
+                      <div className='triage'>
+                        <div className='third-container'></div>
+                        {triage.triage_level === 'self_care' ? (
+                          <>
+                            <h3>Self care</h3>
+                            <p style={{ textAlign: 'center', fontSize: 18 }}>
+                              a medical consultation is advised but not strictly
+                              required; you should observe your symptoms and
+                              consult a doctor if your symptoms worsen within 24
+                              hours.
+                            </p>
+                          </>
+                        ) : triage.triage_level === 'emergency' ? (
+                          <>
+                            <h3>Emergency</h3>
+                            <p style={{ textAlign: 'center', fontSize: 18 }}>
+                              the reported evidence may indicate a serious or
+                              life-threatening condition and thus you may
+                              require immediate medical attention.
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <h3>Consultation</h3>
+                            <p style={{ textAlign: 'center', fontSize: 18 }}>
+                              You may require a medical consultation when
+                              possible. We recommend that you visit this type of
+                              specialist:
+                              {' ' +
+                                recommendation.recommended_specialist?.name}
+                              .
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <Box sx={{ display: 'grid', placeItems: 'center', pt: 2 }}>
+                      <Box sx={{ flex: '1 1 auto' }} />
+                      <Button sx={{ mr: 1 }} onClick={handleReset}>
+                        <p style={{ fontSize: 20 }}>Complete</p>
+                      </Button>
+                    </Box>
+                  </div>
+                )}
+              </React.Fragment>
+            )}
+          </div>
         </div>
       </Box>
-    </div>
+    </>
   );
 }

@@ -1,7 +1,7 @@
-import { CircularProgress } from "@material-ui/core";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import TherapDisplayer from "./therapCard";
+import { CircularProgress } from '@material-ui/core';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import TherapDisplayer from './therapCard';
 
 export default function Therap() {
   const [data, setData] = useState<any>([]);
@@ -9,7 +9,7 @@ export default function Therap() {
   const [isError, setIsError] = useState(false);
   useEffect(() => {
     axios
-      .get("http://localhost:3002/therapeutics")
+      .get('http://localhost:3002/therapeutics')
       .then((response) => {
         setData(response.data);
         console.log(response.data);
@@ -25,11 +25,11 @@ export default function Therap() {
   return (
     <>
       {loading ? (
-        <CircularProgress></CircularProgress>
+        <CircularProgress style={{ color: '#58cad9' }}></CircularProgress>
       ) : isError ? (
         <h1>No data available.</h1>
       ) : (
-        <div className="therap">
+        <div className='therap'>
           {data.map((e: any) => {
             console.log(e);
             return <TherapDisplayer data={e}></TherapDisplayer>;

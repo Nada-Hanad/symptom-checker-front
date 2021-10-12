@@ -47,11 +47,14 @@ function a11yProps(index: any) {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: 'rgba(224, 224, 224, 0.3);',
+    position: 'absolute',
+    top: 125,
     display: 'flex',
     color: 'black',
-    height: '90vh',
-    overflowX: 'hidden'
+    fontWeight: 300,
+    overflowX: 'hidden',
+    overflowY: 'scroll',
+    backgroundColor: '#E7FBFE'
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`
@@ -77,12 +80,36 @@ export default function VerticalTabs() {
         aria-label='Vertical tabs example'
         className={classes.tabs}
       >
-        <Tab label='Basic knowledge' {...a11yProps(0)} />
-        <Tab label='Statistics' {...a11yProps(1)} />
-        <Tab label='Symptoms' {...a11yProps(2)} />
-        <Tab label='How to protect yourself and others' {...a11yProps(3)} />
-        <Tab label='If you were sick' {...a11yProps(4)} />
-        <Tab label='therapeutics' {...a11yProps(5)} />
+        <Tab
+          label='Basic knowledge'
+          {...a11yProps(0)}
+          style={{ fontFamily: 'Poppins', fontWeight: 'bolder' }}
+        />
+        <Tab
+          label='Statistics'
+          {...a11yProps(1)}
+          style={{ fontFamily: 'Poppins', fontWeight: 'bolder' }}
+        />
+        <Tab
+          label='Symptoms'
+          {...a11yProps(2)}
+          style={{ fontFamily: 'Poppins', fontWeight: 'bolder' }}
+        />
+        <Tab
+          label='How to protect yourself and others'
+          {...a11yProps(3)}
+          style={{ fontFamily: 'Poppins', fontWeight: 'bolder' }}
+        />
+        <Tab
+          label='If you were sick'
+          {...a11yProps(4)}
+          style={{ fontFamily: 'Poppins', fontWeight: 'bolder' }}
+        />
+        <Tab
+          label='therapeutics'
+          {...a11yProps(5)}
+          style={{ fontFamily: 'Poppins', fontWeight: 'bolder' }}
+        />
       </Tabs>
       <div className='second-tabs'>
         <TabPanel value={value} index={0}>
@@ -92,7 +119,9 @@ export default function VerticalTabs() {
         </TabPanel>
 
         <TabPanel value={value} index={2}>
-          <SymptomTab></SymptomTab>
+          <div className='stats-tab'>
+            <SymptomTab></SymptomTab>
+          </div>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Stats></Stats>
