@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 .main {
   display: grid;
@@ -68,11 +69,11 @@ h3,
 h4 {
   margin: 0;
   font-family: 'Poppins';
-  font-weight: 300;
 }
 p {
   margin: 0;
   font-family: 'Montserrat';
+  font-weight: bold;
 }
 .left-nav {
   margin-top: 5px;
@@ -94,7 +95,7 @@ p {
   display: grid;
   min-height: 105vh;
   width: 100vw;
-  background: url('./assets/bg.png');
+  background: url('./assets/bg.png') no-repeat;
   overflow-x: hidden;
   place-items: center;
 }
@@ -383,10 +384,6 @@ textarea:focus {
   flex-direction: column;
   align-items: center;
 }
-.home-page {
-  min-height: 90vh;
-  width: 100vw;
-}
 .MuiBox-root {
   padding: 0 !important;
 }
@@ -403,4 +400,69 @@ textarea:focus {
 }
 .css-1n5c3jb {
   margin: 0 !important;
+}
+.home-page-upper {
+  margin-top: 15vh;
+  height: 75vh;
+  width: 90vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.image {
+  height: 55vh;
+  width: 46vh;
+  display: grid;
+  place-items: center;
+}
+.text {
+  height: 45vh;
+  width: 60vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.container-home {
+  height: 22vh;
+  width: 100%;
+  margin-top: 4vh;
+  border-radius: 8px;
+  background-color: #58cad9;
+  padding: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.item {
+  border-right: solid;
+  border-color: white;
+  display: grid;
+  color: white;
+  font-size: 22px;
+  place-items: center;
+}
+.lower-home {
+  height: 50vh;
+  width: 80vw;
+  margin-bottom: 5vh;
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.lower-item {
+  background-color: white;
+  height: 70%;
+  width: 30vh;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+.home-page {
+  display: grid;
+  place-items: center;
+  margin-bottom: 10vh;
+}
+
+.logo-inf {
+  display: flex;
 }
