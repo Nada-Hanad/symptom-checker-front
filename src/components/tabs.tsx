@@ -213,6 +213,10 @@ export default function ScrollableTabsButtonForce() {
               </div>
             </div>
             <h3>Click on the Symptoms checker tab and begin the experience!</h3>
+            <h3>
+              {' '}
+              Or visit our Covid page to stay up-to-date with the pendemic.
+            </h3>
             <p>Statistics provided by NEHI Research Brief, NPR.</p>
           </div>
         </TabPanel>
